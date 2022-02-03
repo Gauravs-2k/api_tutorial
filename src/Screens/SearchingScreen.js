@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, Text, SafeAreaView, TextInput, Image, ScrollView } from 'react-native';
+import { StyleSheet, View, Text, SafeAreaView, TextInput, TouchableOpacity, FlatList } from 'react-native';
 import { getApiData } from '../api';
 import Row from '../Row';
-const SerchingScreen = () => {
+
+const SerchingScreen = ({ navigation }) => {
   const [data, setData] = useState([])
-  const [apiText, setApiText] = useState('');
+  const [apiText, setApiText] = useState('sarsagrges');
+
+
 
   const getapi = async () => {
-    getApiData().then((data) => setData(data['kristalList'])).catch((err) => { });
+    getApiData().then((data) => setData(data['kristalList'])).catch((err) => { console.log('Thiserr==', err) });
     //console.log(JSON.stringify(data));
   };
 
@@ -17,6 +20,20 @@ const SerchingScreen = () => {
     }
 
   }, [apiText])
+
+
+  const renderItem = ({ item }) => (
+    <TouchableOpacity onPress={() => navigation.navigate('Details', { kristalId: item.kristalId })}>
+      <View key={item.kristalUniqueId}>
+        <Row
+          kristalImageUrl={item.kristalImageUrl}
+          kristalName={item.kristalName}
+          kristalType={item.kristalType}
+          fundType={item.fundType}
+        />
+      </View>
+    </TouchableOpacity >
+  )
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -28,23 +45,11 @@ const SerchingScreen = () => {
           editable
         />
         {apiText.length > 5 ? (
-          <ScrollView>
-            {data.map(item => (
-              <View style={styles.item}>
-                <Image
-                  style={styles.showImage}
-                  source={{
-                    uri: item.kristalImageUrl
-                  }}
-                />
-                <Row
-                  kristalName={item.kristalName}
-                  kristalType={item.kristalType}
-                  fundType={item.fundType}
-                />
-              </View>
-            ))}
-          </ScrollView>
+          <FlatList
+            data={data}
+            renderItem={renderItem}
+          />
+
         ) : (
           <View>
             <Text style={styles.text}>Enter more than 5 letters</Text>
@@ -91,13 +96,7 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     borderRadius: 5,
   },
-  showImage: {
-    width: 50,
-    height: 50,
-    alignItems: 'flex-start',
-    justifyContent: 'flex-end',
-    paddingRight: 10,
-  },
+
 });
 
 export default SerchingScreen;

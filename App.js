@@ -1,10 +1,14 @@
 import React from 'react';
-import SerchingScreen from './src/Screens/SearchingScreen';
+import AppNav from './src/Navigation/navigator';
+import { Provider } from 'react-redux';
+import { store } from './src/redux/store'
 
 const App = () => {
-
   return (
-    <SerchingScreen />
+
+    <Provider store={store}>
+      <AppNav />
+    </Provider>
   );
 };
 

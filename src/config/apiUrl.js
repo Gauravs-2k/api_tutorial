@@ -1,12 +1,9 @@
 import axios from 'axios';
-export async function getApiData() {
-    //let res = await axios.get('https://jsonplaceholder.typicode.com/users')
-    // this.setState({ data: res.data })
+export async function getUserDetails() {
     let res = await axios({
         method: 'GET',
         baseURL: 'https://staging.kristal.ai',
-        url: '/assetmanager-ws/api/v4/kristals/kristalassetsearch?query=black',
-        //url: 'https://jsonplaceholder.typicode.com/users',
+        url: '/kristals-ws/api/v3/kristals/kristaldetails?kristal=1997',
         headers: ({
             PLATFORM_VERSION: 4.75,
             Agent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.99 Safari/537.36',
@@ -19,5 +16,5 @@ export async function getApiData() {
             refreshCache: 'refreshCache'
         }),
     })
-    return res.data
+    return res
 }
